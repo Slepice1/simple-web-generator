@@ -1,0 +1,5 @@
+Run `sphinx-apidoc -o . ../../simple_web_generator' in this directory.
+
+This will generate `modules.rst' and `simple_web_generator.rst'.
+
+Then include `modules.rst' in your `index.rst' file.
