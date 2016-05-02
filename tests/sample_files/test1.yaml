@@ -1,0 +1,6 @@
+windows:
+  - id: header
+    name: header
+  - id: main
+    name: about
+  - id: footer

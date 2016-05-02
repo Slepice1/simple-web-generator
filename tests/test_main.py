@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
 from pytest import raises
 
-# The parametrize function is generated, so this doesn't work:
-#
-#     from pytest.mark import parametrize
-#
 import pytest
 parametrize = pytest.mark.parametrize
 
 from simple_web_generator import metadata
-from simple_web_generator.main import main
+from simple_web_generator.window import Window
+from simple_web_generator.main import main, get_windows
 
+import click
+from click.testing import CliRunner
 
-class TestMain(object):
+import yaml
+
+class TestMain:
     @parametrize('helparg', ['--help'])
     def test_help(self, helparg, capsys):
         with raises(SystemExit) as exc_info:
@@ -23,3 +24,29 @@ class TestMain(object):
         assert 'usage' in out.lower()
         # Should exit with zero return code.
         assert exc_info.value.code == 0
+
+class TestWindowClass:
+    def test_constructor(self):
+        #Window with only id set
+        window_only_id = vars(Window(**{'id': 'header'}))
+        assert window_only_id['id'] == "header"
+        assert window_only_id['name'] == "header"
+        assert window_only_id['show_name'] == False
+        #Window with id and name set
+        window_id_name = vars(Window(**{'id': 'header', 'name': 'ABOUT'}))
+        assert window_id_name['id'] == "header"
+        assert window_id_name['name'] == "ABOUT"
+        assert window_id_name['show_name'] == False
+        #Window with id and name and show_name set
+        window_all = vars(Window(**{'id': 'header', 'name': 'ABOUT', 'show_name': True}))
+        assert window_all['id'] == "header"
+        assert window_all['name'] == "ABOUT"
+        assert window_all['show_name'] == True
+
+class TestYAMLParsing:
+    def test_basic_windows(self):
+        with click.open_file('tests/sample_files/test1.yaml', 'r') as f:
+            template = yaml.load(f)
+            result = get_windows(template)
+        #Should return list of windows
+        #assert result == [Window(**{'id': 'header', 'name': 'header'}), Window(**{'id': 'main', 'name': 'about'}), Window(**{'id': 'footer'})]
