@@ -4,6 +4,8 @@
 
 class Window:
 
+    """Basic window class"""
+
     DEFAULT_HORIZONTAL_BORDER = "-";
     DEFAULT_VERTICAL_BORDER = "|";
     DEFAULT_CORNER = "+";
