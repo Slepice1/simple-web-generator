@@ -7,13 +7,19 @@ from bs4 import BeautifulSoup, NavigableString
 
 class Content:
 
-    """Class for various content, content mus be inside window"""
+    """Class for various content, content must be inside window"""
 
     def __init__(self, text):
         text = ''.join([line+'\n' if len(line) else "&nbsp;\n" for line in text.splitlines()])
-        html = markdown.markdown(text, extensions=['markdown.extensions.nl2br'])
-        self.html = self._get_html(html)
-        self.plain_text = self._get_plain_text(html)
+        self.html = markdown.markdown(text)
+        self.plain_text = self._get_plain_text(self.html)
+
+        if self.plain_text:
+            self.width = max((len(line) for line in self.plain_text.splitlines()))
+            self.height = len(self.plain_text.splitlines())
+        else:
+            self.width = 0
+            self.height = 0
 
     def _get_html(self, text):
         soup = BeautifulSoup(text, 'html.parser')
@@ -27,3 +33,6 @@ class Content:
             for match in soup.findAll(tag):
                 match.replaceWithChildren()
         return soup
+
+    def render(self):
+        return self._get_html(self.html)
