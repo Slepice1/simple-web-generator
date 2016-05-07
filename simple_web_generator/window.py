@@ -21,48 +21,61 @@ class Window:
 
         self._set_border(kwargs.get("border", {}))
 
-        self.width = self._get_width(kwargs.get("width", 1))
-        self.height = self._get_height(kwargs.get("height", 1))
+        self.padding = tuple(int(pad) for pad in kwargs.get("padding", "0 0 0 0").split(' '))
+
+        self._set_sizes(kwargs.get("width", 2), kwargs.get("height", 2)) #must be at least 3
 
     def _set_border(self, border):
         self.horizontal_border = border.get("horizontal", Window.DEFAULT_HORIZONTAL_BORDER)
         self.vertical_border = border.get("vertical", Window.DEFAULT_VERTICAL_BORDER)
         self.corner = border.get("corner", Window.DEFAULT_CORNER)
 
-    def _get_width(self, width):
+    def _set_sizes(self, width, height):
+        horizontal_padding = self.padding[1] + self.padding[3]
+        computed_width = self.content.width + horizontal_padding + 2 #border size
         if self.show_name:
-            width = max((int(width), self.content.width, len(self.name) + 2))
-        else:
-            width = max(int(width), self.content.width)
-        return width + 2 #size of border
+            computed_width = max(computed_width, len(self.name) + horizontal_padding + 4) #border size
 
-    def _get_height(self, height):
-        height = max(int(height), self.content.height)
-        return height + 2 #size of border
+        self.width = max(int(width), computed_width)
+        self.inside_width = self.width - horizontal_padding - 2 #border size
+
+        vertical_padding = self.padding[0] + self.padding[2]
+        computed_height = self.content.height + vertical_padding + 2  #border size
+        self.height = max(int(height), computed_height)
+        self.inside_height = self.height - vertical_padding - 2 #border size
 
     def render(self):
         lines = []
-        horizontal_template = "{0}" + "{1}"*(self.width-2) + "{0}"
+        spaces_width = self.inside_width + self.padding[1] + self.padding[3]
+        print(self.padding)
+        horizontal_template = "{0}" + "{1}"*spaces_width + "{0}"
+        #Top Border
         if self.show_name:
-            template = "{0}{1}{2}" + "{1}"*(self.width-2-len(self.name)-1) + "{0}"
+            template = "{0}{1}{2}" + "{1}"*(spaces_width-len(self.name)-1) + "{0}"
             lines.append(template.format(self.corner,
                                          self.horizontal_border,
                                          self.name))
         else:
             lines.append(horizontal_template.format(self.corner,
                                                     self.horizontal_border))
-
+        #Top padding
+        for i in range(self.padding[0]):
+            lines.append(horizontal_template.format(self.vertical_border," "))
+        #Content
         content_lines = self.content.render().splitlines()
-        for i in range(self.height-2):
+        for i in range(self.inside_height):
             if i < len(content_lines):
-                line_template = "{0}{2}" + "{1}"*(self.width-2-len(content_lines[i])) + "{0}"
+                line_template = ("{0}" + "{1}"*self.padding[3] + "{2}" +
+                                 "{1}"*(self.inside_width + self.padding[1] - len(content_lines[i])) + "{0}")
                 lines.append(line_template.format(self.vertical_border,
                                                   " ",
                                                   content_lines[i]))
             else:
-                line_template = "{0}" + "{1}"*(self.width-2) + "{0}"
-                lines.append(line_template.format(self.vertical_border," ",))
-
+                lines.append(horizontal_template.format(self.vertical_border," "))
+        #Bottom padding
+        for i in range(self.padding[2]):
+            lines.append(horizontal_template.format(self.vertical_border," "))
+        #Bottom border
         lines.append(horizontal_template.format(self.corner,
                                                 self.horizontal_border))
         return '\n'.join(lines)
