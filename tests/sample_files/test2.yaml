@@ -1,0 +1,18 @@
+windows:
+  - id: header
+    name: NAME
+    content: Vojtěch "Slepice1" Jelínek
+    show_name: True
+    padding: 1 3 1 3
+  - id: contact
+    name: CONTACT
+    content: |
+            [vojtin.j@gmail.com](mailto:vojtin.j@gmail.com)
+            [linkedin](https://cz.linkedin.com/in/vojtěch-jelínek-a6387a80)
+            [github](https://github.com/Slepice1)
+            [steam](http://steamcommunity.com/id/slepice1/)
+            [twitter](https://twitter.com/VojtaJelinek)
+            [facebook](https://www.facebook.com/vojtech.jelinek.754)
+    show_name: True
+    padding: 1 3 1 3
+  - id: footer

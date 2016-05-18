@@ -47,7 +47,6 @@ class Window:
     def render(self):
         lines = []
         spaces_width = self.inside_width + self.padding[1] + self.padding[3]
-        print(self.padding)
         horizontal_template = "{0}" + "{1}"*spaces_width + "{0}"
         #Top Border
         if self.show_name:
@@ -63,10 +62,11 @@ class Window:
             lines.append(horizontal_template.format(self.vertical_border," "))
         #Content
         content_lines = self.content.render().splitlines()
+        plain_content_lines = self.content.plain_text.splitlines()
         for i in range(self.inside_height):
             if i < len(content_lines):
                 line_template = ("{0}" + "{1}"*self.padding[3] + "{2}" +
-                                 "{1}"*(self.inside_width + self.padding[1] - len(content_lines[i])) + "{0}")
+                                 "{1}"*(self.inside_width + self.padding[1] - len(plain_content_lines[i])) + "{0}")
                 lines.append(line_template.format(self.vertical_border,
                                                   " ",
                                                   content_lines[i]))

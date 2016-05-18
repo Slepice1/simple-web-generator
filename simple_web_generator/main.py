@@ -13,17 +13,18 @@ from simple_web_generator.window import Window
 @click.argument('template', type=click.File('r'))
 def main(template):
     yaml_template = yaml.load(template)
-    click.echo(yaml_template)
+    output = []
+    for window in get_windows(yaml_template):
+        output.append(window.render())
+    click.echo("\n".join(output))
 
 def get_windows(template):
     windows_info = template.get("windows", [])
-    windows = []
     for window_info in windows_info:
         if 'id' in window_info:
-            windows.append(Window(**window_info))
+            yield Window(**window_info)
         else:
             raise TemplateException("Id for window must be set")
-    return windows
 
 class TemplateException(Exception):
 

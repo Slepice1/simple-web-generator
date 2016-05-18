@@ -155,7 +155,7 @@ def coverage():
     import pytest
     pytest.main(PYTEST_FLAGS + [
         '--cov', CODE_DIRECTORY,
-        '--cov-report', 'term-missing',
+        '--cov-report', 'html',
         TESTS_DIRECTORY])
 
 
