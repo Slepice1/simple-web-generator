@@ -68,6 +68,14 @@ class TestWindowClass:
         assert window_show_id_fixed_width.render() == ("+-header---+\n"
                                                        "|          |\n"
                                                        "+----------+")
+        window_show_name_with_tags = Window(**{'id': 'header',
+                                               'show_name': True,
+                                               'h2_name': True,
+                                               'width': 12,
+                                               'height': 3})
+        assert window_show_name_with_tags.render() == ("+-<h2>header</h2>---+\n"
+                                                       "|          |\n"
+                                                       "+----------+")
 
     def test_content_render(self):
         window_line_content = Window(**{'id': 'header',
@@ -232,3 +240,54 @@ class TestWindowClass:
                                          '|   <a href="http://example.com/">example1</a>  |\n'
                                          '|   <a href="http://example2.com/">example2</a>  |\n'
                                          '+-------------+')
+
+    def test_border_render(self):
+        window_all_same_border = Window(**{'id': 'header',
+                                      'width': 5,
+                                      'height': 4,
+                                      'border': {'all': '*'}})
+        assert window_all_same_border.render() == ("*****\n"
+                                              "*   *\n"
+                                              "*   *\n"
+                                              "*****")
+        window_diff_border = Window(**{'id': 'header',
+                                       'width': 5,
+                                       'height': 4,
+                                       'border': {'horizontal': '*',
+                                                  'vertical': '+',
+                                                  'corner': '/'}})
+        assert window_diff_border.render() == ("/***/\n"
+                                               "+   +\n"
+                                               "+   +\n"
+                                               "/***/")
+        window_partial_border = Window(**{'id': 'header',
+                                          'width': 5,
+                                          'height': 4,
+                                          'border': {'horizontal': '*',
+                                                     'corner': '/'}})
+        assert window_partial_border.render() == ("/***/\n"
+                                               "|   |\n"
+                                               "|   |\n"
+                                               "/***/")
+        window_all_diff_border = Window(**{'id': 'header',
+                                           'width': 5,
+                                           'height': 4,
+                                           'border': {'left': '*',
+                                                      'right': '-',
+                                                      'top': 'R',
+                                                      'bottom': 'k'}})
+        assert window_all_diff_border.render() == ("+RRR+\n"
+                                                   "*   -\n"
+                                                   "*   -\n"
+                                                   "+kkk+")
+        window_more_border = Window(**{'id': 'header',
+                                       'width': 5,
+                                       'height': 4,
+                                       'border': {'left': '*',
+                                                  'vertical': '-',
+                                                  'top': 'R',
+                                                  'all': 'k'}})
+        assert window_more_border.render() == ("kRRRk\n"
+                                                   "*   -\n"
+                                                   "*   -\n"
+                                                   "kkkkk")
