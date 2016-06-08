@@ -13,8 +13,14 @@ from simple_web_generator.window import Window
 @click.argument('template', type=click.File('r'))
 def main(template):
     yaml_template = yaml.load(template)
+    config = yaml_template.get("config", {})
+    windows = list(get_windows(yaml_template))
+    if config.get("windows_same_width", False):
+        max_width = max(window.width for window in windows)
+        for window in windows:
+            window.width = max_width
     output = []
-    for window in get_windows(yaml_template):
+    for window in windows:
         output.append(window.render())
     click.echo("\n".join(output))
 

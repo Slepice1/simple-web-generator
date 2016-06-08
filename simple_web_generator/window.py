@@ -38,13 +38,26 @@ class Window:
         if self.show_name:
             computed_width = max(computed_width, len(self.name) + horizontal_padding + 4) #border size
 
-        self.width = max(int(width), computed_width)
-        self.inside_width = self.width - horizontal_padding - 2 #border size
+        self._width = max(int(width), computed_width)
+        self.inside_width = self._width - horizontal_padding - 2 #border size
 
         vertical_padding = self.padding[0] + self.padding[2]
         computed_height = self.content.height + vertical_padding + 2  #border size
-        self.height = max(int(height), computed_height)
-        self.inside_height = self.height - vertical_padding - 2 #border size
+        self._height = max(int(height), computed_height)
+        self.inside_height = self._height - vertical_padding - 2 #border size
+
+        assert self.inside_height >= 0
+        assert self.inside_width >= 0
+        assert self._height >= self.inside_height
+        assert self._width >= self.inside_width
+
+    @property
+    def width(self):
+        return self._width
+
+    @width.setter
+    def width(self, width):
+        self._set_sizes(width, self._height)
 
     def render(self):
         lines = []

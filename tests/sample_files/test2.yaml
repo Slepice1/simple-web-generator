@@ -1,5 +1,5 @@
 config:
-
+    windows_same_width: True
 windows:
   - id: header
     name: NAME
