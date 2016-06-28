@@ -14,6 +14,7 @@ from simple_web_generator.window import Window
 def main(template):
     yaml_template = yaml.load(template)
     config = yaml_template.get("config", {})
+
     windows = list(get_windows(yaml_template))
     if config.get("windows_same_width", False):
         max_width = max(window.width for window in windows)
@@ -24,11 +25,18 @@ def main(template):
         output.append(window.render())
     click.echo("\n".join(output))
 
+def add_default(window_info, default):
+    for key in default:
+        if key not in window_info:
+            window_info[key] = default[key]
+    return window_info
+
 def get_windows(template):
+    default = template.get("window_default", {})
     windows_info = template.get("windows", [])
     for window_info in windows_info:
         if 'id' in window_info:
-            yield Window(**window_info)
+            yield Window(add_default(window_info, default))
         else:
             raise TemplateException("Id for window must be set")
 

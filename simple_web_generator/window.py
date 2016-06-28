@@ -12,17 +12,17 @@ class Window:
     VERTICAL_BORDER = "|";
     CORNER = "+";
 
-    def __init__(self, **kwargs):
-        self.id = kwargs.get("id")
-        self.name = kwargs.get("name", self.id)
-        self.show_name = kwargs.get("show_name", False)
-        self.h2_name = kwargs.get("h2_name", False)
+    def __init__(self, attributes):
+        self.id = attributes.get("id")
+        self.name = attributes.get("name", self.id)
+        self.show_name = attributes.get("show_name", False)
+        self.h2_name = attributes.get("h2_name", False)
 
-        self.content = Content(kwargs.get("content", ""))
+        self.content = Content(attributes.get("content", ""))
 
-        self._set_border(kwargs.get("border", {}))
-        self.padding = tuple(int(pad) for pad in kwargs.get("padding", "0 0 0 0").split(' '))
-        self._set_sizes(kwargs.get("width", 2), kwargs.get("height", 2)) #must be at least 3
+        self._set_border(attributes.get("border", {}))
+        self.padding = tuple(int(pad) for pad in attributes.get("padding", "0 0 0 0").split(' '))
+        self._set_sizes(attributes.get("width", 2), attributes.get("height", 2)) #must be at least 3
 
     def _set_border(self, border):
         b = border

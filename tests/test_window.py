@@ -10,13 +10,14 @@ class TestWindowClass:
         assert window_only_id['name'] == "header"
         assert window_only_id['show_name'] == False
         #Window with id and name set
-        window_id_name = vars(Window(**{'id': 'header',
-                                        'name': 'ABOUT'}))
-        assert window_id_name['id'] == "header"
-        assert window_id_name['name'] == "ABOUT"
-        assert window_id_name['show_name'] == False
-        assert window_id_name['width'] == 2
-        assert window_id_name['height'] == 2
+        window_id_name = Window(**{'id': 'header',
+                                   'name': 'ABOUT'})
+        window_id_name_vars = vars(window_id_name)
+        assert window_id_name_vars['id'] == "header"
+        assert window_id_name_vars['name'] == "ABOUT"
+        assert window_id_name_vars['show_name'] == False
+        assert window_id_name.width == 2
+        assert window_id_name_vars['_height'] == 2
         #Window with id and name and show_name set
         window_all = vars(Window(**{'id': 'header',
                                     'name': 'ABOUT',
@@ -30,21 +31,21 @@ class TestWindowClass:
                                       'width': '5',
                                       'height': 8}))
         assert window_sizes['id'] == "header"
-        assert window_sizes['width'] == 5
-        assert window_sizes['height'] == 8
+        assert window_sizes['_width'] == 5
+        assert window_sizes['_height'] == 8
 
         window_name_size = vars(Window(**{'id': 'header', 'show_name': True}))
         assert window_name_size['id'] == "header"
-        assert window_name_size['width'] == 10
-        assert window_name_size['height'] == 2
+        assert window_name_size['_width'] == 10
+        assert window_name_size['_height'] == 2
 
         window_content_size = vars(Window(**{'id': 'header',
                                              'content': "Ahoj toto je okno",
                                              'width': '8'}))
         assert window_content_size['id'] == "header"
         assert window_content_size['content'].render() == "Ahoj toto je okno"
-        assert window_content_size['width'] == 19
-        assert window_content_size['height'] == 3
+        assert window_content_size['_width'] == 19
+        assert window_content_size['_height'] == 3
 
     def test_no_content_render(self):
         window_only_id = Window(**{'id': 'header'})
