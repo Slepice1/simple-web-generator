@@ -11,6 +11,7 @@ from simple_web_generator.window import Window
 
 @click.command()
 @click.argument('template', type=click.File('r'))
+@click.option('--folder', is_flag=True)
 def main(template):
     yaml_template = yaml.load(template)
     config = yaml_template.get("config", {})
@@ -20,10 +21,19 @@ def main(template):
         max_width = max(window.width for window in windows)
         for window in windows:
             window.width = max_width
+    if folder:
+        pass
+    else:
+        click.echo(render(windows, config))
+
+
+def render(windows, config):
     output = []
+    spaces_between_windows = config.get("spaces_between_windows", 1)
     for window in windows:
         output.append(window.render())
-    click.echo("\n".join(output))
+        output.extend("" for _ in range(spaces_between_windows))
+    return "\n".join(output)
 
 def add_default(window_info, default):
     for key in default:

@@ -1,5 +1,6 @@
 config:
     windows_same_width: True
+    spaces_between_windows: 1
 window_default:
     padding: 1 3 1 3
 windows:
