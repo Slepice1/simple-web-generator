@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 """Program entry point"""
 
-
-
 import click
 import yaml
 
@@ -11,8 +9,8 @@ from simple_web_generator.window import Window
 
 @click.command()
 @click.argument('template', type=click.File('r'))
-@click.option('--folder', is_flag=True)
-def main(template):
+@click.option('--folder', is_flag=True, default=False)
+def main(template, folder):
     yaml_template = yaml.load(template)
     config = yaml_template.get("config", {})
 

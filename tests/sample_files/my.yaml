@@ -1,7 +1,7 @@
 config:
     windows_same_width: True
 window_default:
-    padding: 1 3 1 3
+    padding: 1 2 1 2
     show_name: True
 windows:
   - id: header
@@ -22,9 +22,14 @@ windows:
     name: PROJECTS
     content: |
             Discord Bot
-            [Process Algoritms](process_algoritms)
-            [25 Variations](25_variations) ([?](http://veryinteractive.net/projects/variations))
-            CheckIo
+            [Process Algorithms](process-algorithms)
+            [CheckiO](https://py.checkio.org/user/Slepice1/)
+    h2_name: True
+  - id: skills
+    name: SKILLS
+    content: |
+            python
+            HTML + CSS
     h2_name: True
   - id: footer
     name: FOOTER
