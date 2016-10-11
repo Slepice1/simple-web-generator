@@ -4,13 +4,15 @@
 
 import click
 import yaml
+import os
 
 from simple_web_generator.window import Window
 
 @click.command()
 @click.argument('template', type=click.File('r'))
-@click.option('--folder', is_flag=True, default=False)
-def main(template, folder):
+@click.option('--directory', default=False)
+@click.option('--template', default=False)
+def main(template, directory):
     yaml_template = yaml.load(template)
     config = yaml_template.get("config", {})
 
@@ -19,11 +21,23 @@ def main(template, folder):
         max_width = max(window.width for window in windows)
         for window in windows:
             window.width = max_width
-    if folder:
-        pass
+    rendered_text = render(windows, config)
+    if directory:
+        if template:
+            create_html_file(directory, rendered_text, template)
+        else:
+            create_html_file(directory, rendered_text)
     else:
-        click.echo(render(windows, config))
+        click.echo(rendered_text)
 
+def create_html_file(directory_name, generated_text,
+                     template="simple_web_generator/template.html"):
+    if not os.path.exists(directory_name):
+        os.makedirs(directory_name)
+    with open("simple_web_generator/template.html", "r") as template:
+        template_text = template.read();
+        with open(os.path.join(directory_name, "index.html"), "w") as write_file:
+            write_file.write(template_text.replace("<!--text-->", generated_text))
 
 def render(windows, config):
     output = []
